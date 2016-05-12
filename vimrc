@@ -234,10 +234,16 @@ imap <c-h> <Left>
 " Ctrl + L 插入模式下光标向右移动
 imap <c-l> <Right>
 
+" remap U to <C-r> for easier redo
+nnoremap U <C-r>
+
+" kj 替换 Esc
+inoremap kj <Esc>
+
 " Ctrl+a 全选幷复制
 map <C-a> ggVGY
 "map! <C-a> <ESC>ggVGY
-map <F12> gg=G
+"map <F12> gg=G
 
 " -----------------------------------------------------------------------------
 "  < 3.4 界面配置 >
@@ -247,16 +253,17 @@ set nu                                             "强制显示行号
 "set nu!                                            "取消显示行号
 set numberwidth=2                                 "设置行号宽度
 set laststatus=2                                  "启用状态栏信息(1),总是显示状态行(2)
-set cmdheight=2                                   "设置命令行的高度为2，默认为1
+"set cmdheight=2                                   "设置命令行的高度为2，默认为1
 set cursorline                                    "突出显示当前行
-set cursorcolumn                                "突出显示当前列
+" set cursorcolumn                                "突出显示当前列
 " set guifont=YaHei_Consolas_Hybrid:h10           "设置字体:字号（字体名称空格用下划线代替）
 "set nowrap                                        "设置不自动换行
 set shortmess=atI                                 "去掉乌干达欢迎界面
 set scrolloff=1                                   "光标移动到buffer的顶部和底部时保持1行距离  
 
 " 在被分割的窗口间显示空白，便于阅读
-set fillchars=vert:\ ,stl:\ ,stlnc:\
+" set fillchars=vert:\ ,stl:\ ,stlnc:\
+set fillchars=vert:\|
 
 " 高亮字符，让其不受80列限制
 " :highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
@@ -293,16 +300,16 @@ if g:isGUI
     set guioptions-=r
     set guioptions-=L
     nmap <silent> <c-F11> :if &guioptions =~# 'm' <Bar>
-        \set guioptions-=m <Bar>
-        \set guioptions-=T <Bar>
-        \set guioptions-=r <Bar>
-        \set guioptions-=L <Bar>
-    \else <Bar>
-        \set guioptions+=m <Bar>
-        \set guioptions+=T <Bar>
-        \set guioptions+=r <Bar>
-        \set guioptions+=L <Bar>
-    \endif<CR>
+                \set guioptions-=m <Bar>
+                \set guioptions-=T <Bar>
+                \set guioptions-=r <Bar>
+                \set guioptions-=L <Bar>
+                \else <Bar>
+                \set guioptions+=m <Bar>
+                \set guioptions+=T <Bar>
+                \set guioptions+=r <Bar>
+                \set guioptions+=L <Bar>
+                \endif<CR>
 endif
 
 
@@ -312,55 +319,57 @@ endif
 autocmd BufNewFile *.{c,cpp,h,py,sh} call SetTitle()
 func! SetTitle()      " 定义函数，完成插入功能
     if &filetype == 'sh' 
-		call setline(1,"\#!/bin/bash") 
-		call append(line("."), "") 
+        call setline(1,"\#!/bin/bash") 
+        call append(line("."), "") 
+        normal G
+        normal o
     elseif &filetype == 'python'
         call setline(1,"#!/usr/bin/env python")
-        call append(line("."),"# coding=utf-8")
-	    call append(line(".")+1, "") 
-	else 
-		call setline(1, "/*****************************************************") 
-		call append(line("."), "	> File Name: ".expand("%")) 
-		call append(line(".")+1, "	> Author: D.B. Cheung") 
-		call append(line(".")+2, "	> Mail: zhangdebiao_hit@hotmail.com") 
-		call append(line(".")+3, "	> Created Time: ".strftime("%c")) 
-		call append(line(".")+4, " *****************************************************/") 
-		call append(line(".")+5, "")
-	endif
+        call append(line("."),"#coding=utf-8")
+        call append(line(".")+1, "") 
+        normal G
+        normal o
+    else    " c/c++
+        call setline(1, "/*****************************************************") 
+        call append(line("."), "	> File Name: ".expand("%")) 
+        call append(line(".")+1, "	> Author: D.B. Cheung") 
+        call append(line(".")+2, "	> Mail: zhangdebiao_hit@hotmail.com") 
+        call append(line(".")+3, "	> Created Time: ".strftime("%c")) 
+        call append(line(".")+4, " *****************************************************/") 
+        call append(line(".")+5, "")
 
-	if expand("%:e") == 'cpp'
-		call append(line(".")+6, "#include <iostream>")
-        call append(line(".")+7, "")
-        call append(line(".")+8, "using namespace std;")
-        call append(line(".")+9, "")
-        call append(line(".")+10, "int main(int argc, char *argv[])")
-        call append(line(".")+11, "{")
-        call append(line(".")+12, "")
-        call append(line(".")+13, "    return 0;")
-        call append(line(".")+14, "}")
-	endif
-
-	if &filetype == 'c'
-		call append(line(".")+6, "#include <stdio.h>")
-        call append(line(".")+7, "#include <stdlib.h>")
-	    call append(line(".")+8, "")
-        call append(line(".")+9, "int main(int argc, char *argv[])")
-        call append(line(".")+10, "{")
-        call append(line(".")+11, "")
-        call append(line(".")+12, "    return 0;")
-        call append(line(".")+13, "}")
+        if expand("%:e") == 'cpp'
+            call append(line(".")+6, "#include <iostream>")
+            call append(line(".")+7, "")
+            call append(line(".")+8, "using namespace std;")
+            call append(line(".")+9, "")
+            call append(line(".")+10, "int main(int argc, char *argv[])")
+            call append(line(".")+11, "{")
+            call append(line(".")+12, "")
+            call append(line(".")+13, "    return 0;")
+            call append(line(".")+14, "}")
+            normal 14G
+        elseif &filetype == 'c'
+            call append(line(".")+6, "#include <stdio.h>")
+            call append(line(".")+7, "#include <stdlib.h>")
+            call append(line(".")+8, "")
+            call append(line(".")+9, "int main(int argc, char *argv[])")
+            call append(line(".")+10, "{")
+            call append(line(".")+11, "")
+            call append(line(".")+12, "    return 0;")
+            call append(line(".")+13, "}")
+            normal 13G
+        elseif expand("%:e") == 'h'
+            call append(line(".")+6, "#ifndef _".toupper(expand("%:r"))."_H")
+            call append(line(".")+7, "#define _".toupper(expand("%:r"))."_H")
+            call append(line(".")+8, "")
+            call append(line(".")+9, "#endif    //_".toupper(expand("%:r"))."_H")
+            normal 10G
+        endif
     endif
-
-	if expand("%:e") == 'h'
-		call append(line(".")+6, "#ifndef _".toupper(expand("%:r"))."_H")
-		call append(line(".")+7, "#define _".toupper(expand("%:r"))."_H")
-	    call append(line(".")+8, "")
-		call append(line(".")+9, "#endif    //_".toupper(expand("%:r"))."_H")
-	endif
-
 endfunc
-"新建文件后，自动定位到文件尾部
-autocmd BufNewFile * normal G
+"新建文件后，自动定位到文件尾部. 移到了各类文件处
+"autocmd BufNewFile * normal G
 
 " -----------------------------------------------------------------------------
 "  < 3.6 编译、连接、运行配置 (目前只配置了C、C++、Java语言)>
@@ -380,9 +389,9 @@ imap <F7> <ESC>:call Link()<CR>
 "C,C++的调试
 map <F8> :call Rungdb()<CR>
 func! Rungdb()
-	exec "w"
-	exec "!g++ % -g -o %<"
-	exec "!gdb ./%<"
+    exec "w"
+    exec "!g++ % -g -o %<"
+    exec "!gdb ./%<"
 endfunc
 
 let s:LastShellReturn_C = 0
@@ -658,7 +667,7 @@ function! ViewInBrowser(name)
         " let l:browsers["cr"] = Chrome                   "Chrome浏览器缩写
         " let l:browsers["ff"] = Firefox                  "Firefox浏览器缩写
         let l:browsers["ie"] = SystemIE                 "系统IE浏览器缩写
-       
+
         if stridx(file, htdocs) == -1   "文件不在本地虚拟服务器目录，则直接预览（但不能解析PHP文件）
             exec ":silent !start ". l:browsers[a:name] ." file://" . file
         else    "文件在本地虚拟服务器目录，则调用本地虚拟服务器解析预览（先启动本地虚拟服务器）
@@ -922,7 +931,7 @@ if has("cscope")
     "在当前目录中添加任何数据库
     if filereadable("cscope.out")
         cs add cscope.out
-    "否则添加数据库环境中所指出的
+        "否则添加数据库环境中所指出的
     elseif $CSCOPE_DB != ""
         cs add $CSCOPE_DB
     endif
@@ -1026,6 +1035,5 @@ au BufRead,BufNewFile,BufEnter * cd %:p:h
 " 秒内，而<Leader>cs是先按"\"键再按"c"又再按"s"键；如要修改"<leader>"键，可以把
 " 下面的设置取消注释，并修改双引号中的键为你想要的，如修改为逗号键。
 
-" let mapleader = ","
-
+let mapleader = ","
 
