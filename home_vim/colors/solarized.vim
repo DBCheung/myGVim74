@@ -6,6 +6,12 @@
 " Created:  In the middle of the night
 " Modified: 2011 May 05
 "
+" MyCustomColors "{{{
+" ---------------------------------------------------------------------
+"
+" added by zdb
+
+"}}}
 " Usage "{{{
 "
 " ---------------------------------------------------------------------
@@ -538,7 +544,7 @@ endif
 
 exe "hi! Normal"         .s:fmt_none   .s:fg_base0  .s:bg_back
 
-exe "hi! Comment"        .s:fmt_ital   .s:fg_violet .s:bg_none
+exe "hi! Comment"        .s:fmt_ital   .s:fg_magenta .s:bg_none
 "       *Comment         any comment
 
 exe "hi! Constant"       .s:fmt_none   .s:fg_cyan   .s:bg_none
@@ -592,7 +598,7 @@ exe "hi! Ignore"         .s:fmt_none   .s:fg_none   .s:bg_none
 exe "hi! Error"          .s:fmt_bold   .s:fg_red    .s:bg_none
 "       *Error           any erroneous construct
 
-exe "hi! Todo"           .s:fmt_bold   .s:fg_magenta .s:bg_none
+exe "hi! Todo"           .s:fmt_bold   .s:fg_violet .s:bg_none
 "       *Todo            anything that needs extra attention; mostly the
 "                        keywords TODO FIXME and XXX
 "

@@ -285,11 +285,13 @@ endif
 " 设置代码配色方案
 if g:isGUI
     set background=dark             " next 2 lines coroperate with solarized
-    let g:solarized_termtrans=1     " set term transparent to 1
+    let g:solarized_degrade=0
     colorscheme solarized           "Gvim配色方案
 else
     set background=dark
+    let g:solarized_degrade=0
     let g:solarized_termtrans=1 
+    let g:solarized_termcolors=256
     colorscheme solarized           "终端配色方案（见 /usr/share/vim/vim74/color）
 endif
 
