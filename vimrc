@@ -248,7 +248,6 @@ map <C-a> ggVGY
 " -----------------------------------------------------------------------------
 "  < 3.4 界面配置 >
 " -----------------------------------------------------------------------------
-"set number                                        "显示行号
 set nu                                             "强制显示行号
 "set nu!                                            "取消显示行号
 set numberwidth=2                                 "设置行号宽度
@@ -262,8 +261,8 @@ set shortmess=atI                                 "去掉乌干达欢迎界面
 set scrolloff=1                                   "光标移动到buffer的顶部和底部时保持1行距离  
 
 " 在被分割的窗口间显示空白，便于阅读
-" set fillchars=vert:\ ,stl:\ ,stlnc:\
-set fillchars=vert:\|
+set fillchars=vert:\ ,stl:\ ,stlnc:\
+"set fillchars=vert:\|
 
 " 高亮字符，让其不受80列限制
 " :highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
@@ -277,9 +276,9 @@ highlight StatusLineNC guifg=Gray guibg=White
 
 " 设置 gVim 窗口初始位置及大小
 if g:isGUI
-    " au GUIEnter * simalt ~x                     "窗口启动时自动最大化
-    winpos 100 20                                 "指定窗口出现的位置，坐标原点在屏幕左上角
-    set lines=38 columns=120                      "指定窗口大小，lines为高度，columns为宽度
+    " au GUIEnter * simalt ~x       "窗口启动时自动最大化
+    winpos 100 20                   "指定窗口出现的位置，坐标原点在屏幕左上角
+    set lines=38 columns=120        "指定窗口大小，lines为高度，columns为宽度
 endif
 
 " 设置代码配色方案
@@ -289,13 +288,13 @@ if g:isGUI
     colorscheme solarized           "Gvim配色方案
 else
     set background=dark
-    let g:solarized_degrade=0
-    let g:solarized_termtrans=1 
+    let g:solarized_termtrans=1     "设置终端透明
+    let g:solarized_degrade=1       "强制终端使用256色
     let g:solarized_termcolors=256
     colorscheme solarized           "终端配色方案（见 /usr/share/vim/vim74/color）
 endif
 
-" 显示/隐藏菜单栏、工具栏、滚动条，可用 Ctrl + F11 切换
+" Gvim显示/隐藏菜单栏、工具栏、滚动条，可用 Ctrl + F11 切换
 if g:isGUI
     set guioptions-=m
     set guioptions-=T
@@ -500,6 +499,8 @@ func! Compile()
         else
             echohl WarningMsg | echo ""class_Name"is up to date"
         endif
+    elseif expand("%:e") == "py"
+        exec "!time python %"
     else
         let s:Sou_Error = 1
         echohl WarningMsg | echo " please choose the correct source file"
@@ -706,7 +707,7 @@ set bufhidden=hide                  "当buffer被丢弃时隐藏它
 " -----------------------------------------------------------------------------
 "  < Align 插件配置 >
 " -----------------------------------------------------------------------------
-" 一个对齐的插件，用来——排版与对齐代码，功能强大，不过用到的机会不多
+" 一个对齐的插件，用来排版与对齐代码，功能强大，不过用到的机会不多
 
 " -----------------------------------------------------------------------------
 "  < auto-pairs 插件配置 >
@@ -802,6 +803,8 @@ noremap <c-l> <c-w>l
 " -----------------------------------------------------------------------------
 " 关键字补全、文件路径补全、tag补全等等，各种，非常好用，速度超快。
 let g:neocomplcache_enable_at_startup = 1     "vim 启动时启用插件
+let g:neocomplcache_enable_smart_case = 1     " use smart case
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete "启用补全python
 " let g:neocomplcache_disable_auto_complete = 1 "不自动弹出补全列表
 " 在弹出补全列表后用 <c-p> 或 <c-n> 进行上下选择效果比较好
 
@@ -857,7 +860,7 @@ set completeopt=menu                        "关闭预览窗口
 "  < 4.8 SrcExpl 插件配置 >
 " -----------------------------------------------------------------------------
 " 增强源代码浏览，其功能就像Windows中的"Source Insight"
-nmap <F3> :SrcExplToggle<CR>                "打开/闭浏览窗口
+nmap <F3> :SrcExplToggle<CR>                "打开/关闭浏览窗口
 
 " -----------------------------------------------------------------------------
 "  < 4.9 std_c 插件配置 >
@@ -953,10 +956,10 @@ endif
 "  < 5.2 ctags 工具配置 >
 " -----------------------------------------------------------------------------
 " 对浏览代码非常的方便,可以在函数,变量之间跳转等
-set tags=./tags;                            "向上级目录递归查找tags文件（好像只有在Windows下才有用）
+set tags=./tags;        "向上级目录递归查找tags文件（好像只有在Windows下才有用）
 
 " -----------------------------------------------------------------------------
-"  < gvimfullscreen 工具配置 > 
+"  < 5.3 gvimfullscreen 工具配置 > 
 " -----------------------------------------------------------------------------
 " 用于 Windows Gvim 全屏窗口，可用 F11 切换
 " 全屏后再隐藏菜单栏、工具栏、滚动条效果更好
@@ -965,10 +968,11 @@ if (g:iswindows && g:isGUI)
 endif
 
 " -----------------------------------------------------------------------------
-"  < 5.3 vimtweak 工具配置 > 
+"  < 5.4 vimtweak 工具配置 > 
 " -----------------------------------------------------------------------------
 " 这里只用于窗口透明与置顶
-" 常规模式下 Ctrl + Up（上方向键） 增加不透明度，Ctrl + Down（下方向键） 减少不透明度，<Leader>t 窗口置顶与否切换
+" 常规模式下 Ctrl + Up（上方向键） 增加不透明度，Ctrl + Down（下方向键） 减少不透
+" 明度，<Leader>t 窗口置顶与否切换
 if (g:iswindows && g:isGUI)
     let g:Current_Alpha = 255
     let g:Top_Most = 0
