@@ -115,7 +115,7 @@ endif
 " 如果想在 windows 安装就必需先安装 "git for window"，可查阅网上资料
 
 set nocompatible                     "禁用 Vi 兼容模式
-filetype off                         "禁用文件类型侦测
+" filetype off                         "禁用文件类型侦测
 
 if g:islinux
     set rtp+=~/.vim/bundle/vundle/
@@ -196,9 +196,10 @@ set confirm
 " 与windows共享剪贴板
 set clipboard+=unnamed
 
-set foldenable                                        "启用折叠
-" set foldmethod=indent                                 "indent 折叠方式
-set foldmethod=marker                                "marker 折叠方式
+set foldenable                               "启用折叠
+" set foldmethod=indent                      "indent 折叠方式
+set foldmethod=marker                        "marker 折叠方式
+set foldcolumn=2        " 设置折叠位宽
 " 常规模式下用空格键来开关光标行所在折叠（注：zR 展开所有折叠，zM 关闭所有折叠）
 nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
 
