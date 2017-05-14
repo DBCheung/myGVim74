@@ -257,6 +257,10 @@ set laststatus=2                                  "启用状态栏信息(1),总�
 set cursorline                                    "突出显示当前行
 " set cursorcolumn                                "突出显示当前列
 " set guifont=YaHei_Consolas_Hybrid:h10           "设置字体:字号（字体名称空格用下划线代替）
+if (g:islinux && g:isGUI)
+    set guifont=Monospace\ 12 
+else
+    set guifont=YaHei_Consolas_Hybrid:h10
 "set nowrap                                        "设置不自动换行
 set shortmess=atI                                 "去掉乌干达欢迎界面
 set scrolloff=1                                   "光标移动到buffer的顶部和底部时保持1行距离  
